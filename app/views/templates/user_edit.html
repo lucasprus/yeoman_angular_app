@@ -1,0 +1,57 @@
+<form class="form-horizontal" role="form">
+  <div ng-if="isNew" class="form-group">
+    <label for="clientUsername" class="col-sm-2 control-label">Username</label>
+    <div class="col-sm-10">
+      <input type="text" ng-model="user.clientUsername" class="form-control" name="clientUsername">
+    </div>
+  </div>  
+  <div class="form-group">
+    <label for="name" class="col-sm-2 control-label">Name</label>
+    <div class="col-sm-10">
+      <input type="text" ng-model="user.name" class="form-control">
+    </div>
+  </div>  
+  <div class="form-group">
+    <label for="email" class="col-sm-2 control-label">Email</label>
+    <div class="col-sm-10">
+      <input type="email" ng-model="user.email" class="form-control" name="email">
+    </div>
+  </div>
+  <div class="form-group">
+    <label for="password" class="col-sm-2 control-label">Password</label>
+    <div class="col-sm-10">
+      <input type="text" ng-model="user.password" class="form-control" name="password">
+    </div>
+  </div>
+  <div class="form-group">
+    <label for="birthday" class="col-sm-2 control-label">Birthday</label>
+    <div class="col-sm-10">
+      <input type="date" class="form-control" name="birthday" ng-model="user.birthday" datepicker>
+    </div>
+  </div>
+  <div class="form-group">
+    <label class="col-sm-2 control-label">Gender</label>
+    <div class="col-sm-10">
+        <div class="radio">
+          <label>
+            Male <input type="radio" name="gender" ng-model="user.gender" value="M">
+          </label>
+        </div>
+        <div class="radio">
+          <label>
+            Female <input type="radio" name="gender" ng-model="user.gender" value="F">
+          </label>
+        </div>
+    </div>
+  </div>
+
+  <div class="form-group">
+    <label for="bio" class="col-sm-2 control-label">Bio</label>
+    <div class="col-sm-10">
+      <textarea name="bio" ng-model="user.bio" rows="3" class="form-control"></textarea>
+    </div>
+  </div>
+
+</form>
+<button class="btn btn-default" ng-click="save()">Save</button>
+<button class="btn btn-default" ng-click="cancel()">Cancel</button>

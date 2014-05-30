@@ -1,0 +1,41 @@
+  <h3 class="text-muted">yeoman_stats_api_and_angular_app home page</h3>
+
+<!--   <div class="panel panel-info" ng-repeat="(sectionName, sectionData) in data">
+    <div class="panel-heading">
+      <h3 class="panel-title">{{label['statsApp.overview.' + sectionName]}}</h3>
+    </div>
+    <div class="panel-body">
+      <dl class="dl-horizontal">
+        <dt ng-repeat-start="(statsName, statsData) in sectionData">{{label['statsApp.overview.' + sectionName + '.' + statsName]}}</dt>
+        <dd ng-repeat-end>{{statsData | number}}</dd>
+      </dl>
+    </div>
+  </div> -->
+
+  <div class="panel panel-info">
+    <div class="panel-heading">
+      <h3 class="panel-title">Age groups</h3>
+    </div>
+    <div class="panel-body">
+      <d3-pie max-slices="7" data="ageGroupsData" key="key" value="value" chart-title="Age groups" radius="100" chart-height="285"></d3-pie>
+    </div>
+  </div>
+
+  <div class="panel panel-info">
+    <div class="panel-heading">
+      <h3 class="panel-title">seriesChartData</h3>
+    </div>
+    <div class="panel-body">
+      <d3-series data="seriesChartData" chart-title="seriesChartData"></d3-series>
+    </div>
+  </div>  
+
+  <div class="panel panel-info">
+    <div class="panel-heading">
+      <h3 class="panel-title">barChartData</h3>
+    </div>
+    <div class="panel-body">
+      <d3-bars data="barChartData" chart-title="barChartData"></d3-bars>
+    </div>
+  </div>  
+

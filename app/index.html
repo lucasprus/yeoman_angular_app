@@ -1,0 +1,166 @@
+<!doctype html>
+<!--[if lt IE 7]>      <html class="no-js lt-ie9 lt-ie8 lt-ie7"> <![endif]-->
+<!--[if IE 7]>         <html class="no-js lt-ie9 lt-ie8"> <![endif]-->
+<!--[if IE 8]>         <html class="no-js lt-ie9"> <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js"> <!--<![endif]-->
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <title></title>
+    <meta name="description" content="">
+    <meta name="viewport" content="width=device-width">
+    <!-- Place favicon.ico and apple-touch-icon.png in the root directory -->
+    <!-- build:css styles/vendor.css -->
+    <!-- bower:css -->
+    <link rel="stylesheet" href="bower_components/sass-bootstrap/dist/css/bootstrap.css" />
+    <!-- endbower -->
+    <!-- endbuild -->
+    <!-- build:css bower_components/jquery-ui/themes/hot-sneaks/jquery-ui.min.css -->
+    <link rel="stylesheet" href="bower_components/jquery-ui/themes/hot-sneaks/jquery-ui.min.css" />
+    <!-- endbuild -->    
+    <!-- build:css({.tmp,app}) styles/main.css -->
+    <link rel="stylesheet" href="styles/main.css">
+    <link rel="stylesheet" href="styles/my_styles.css">
+    <!-- endbuild -->
+  </head>
+  <body ng-app="usersApp">
+    <!--[if lt IE 7]>
+      <p class="browsehappy">You are using an <strong>outdated</strong> browser. Please <a href="http://browsehappy.com/">upgrade your browser</a> to improve your experience.</p>
+    <![endif]-->
+
+<!--     <div id="test_div_to_hide">
+        Visible...
+    </div> -->
+
+
+<!--   <div ng-controller="DialogController">
+
+  <button type="button" class="btn btn-default" ng-click="show=true">
+      {{DateRangeService.start() | date:"mediumDate"}} - {{DateRangeService.end | date:"mediumDate"}}
+  </button>
+
+    <dialog ok-label="{{label['aui.overview.dialog.show']}}" cancel-label="{{label['aui.overview.dialog.cancel']}}" on-ok="show = false; updateDateRangeService()" on-cancel="show = false; resetDialogDateRange()" visible="show" class="dropdown-period">
+
+      <form class="form-horizontal" role="form">
+        <div class="form-group">
+          <label for="datepicker" class="col-sm-2 control-label">{{label['aui.overview.dialog.end_date']}}</label>
+          <div class="col-sm-10">
+            <input type="text" class="form-control" id="datepicker" datepicker-popup="mediumDate" datepicker-append-to-body="true" ng-model="dialogDate.end" show-weeks="false" show-button-bar="false" is-open="opened" min="dialogDate.min" max="dialogDate.max" ng-required="true" close-text="Close" readonly = "readonly"
+            />
+          </div>
+        </div>
+        <div class="form-group">
+          <label for="period" class="col-sm-2 control-label">{{label['aui.overview.dialog.period']}}</label>
+          <div class="col-sm-10">
+              <select ng-model="dialogDate.period" class="form-control">
+                <option value="month">{{label['aui.overview.period.month']}}</option>
+                <option value="week">{{label['aui.overview.period.week']}}</option>
+                <option value="day">{{label['aui.overview.period.day']}}</option>
+              </select>
+          </div>
+        </div>
+      </form>
+
+    </dialog>
+  </div> -->
+
+<!-- Button trigger modal -->
+<button class="btn btn-primary btn-lg" data-toggle="modal" data-target="#myModal">
+  Launch demo modal
+</button>
+
+<!-- Modal -->
+<div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+        <h4 class="modal-title" id="myModalLabel">Modal title</h4>
+      </div>
+      <div class="modal-body">
+        ...
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+        <button type="button" class="btn btn-primary">Save changes</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+  <div ng-controller="UsersMenuController">
+    <div class="header">
+        <ul class="nav nav-pills pull-right">
+            <li ng-repeat="menuItem in menuItems" ng-class="{active: isActive(menuItem)}"><a ng-href="#{{menuItem.href}}"><span class="glyphicon glyphicon-{{menuItem.glyphicon}}"></span>{{menuItem.label}}</a></li>
+        </ul>
+        <h3 class="text-muted">Simple CRUD application built with Angular, Express and MongoDB</h3>
+    </div>
+  </div>
+
+<!--   <div ng-class="{notification: true, error: $root.bannerNotificationType === 'error', success: $root.bannerNotificationType === 'success', active:$root.bannerNotification}">
+    <a class="close" ng-click="$root.bannerNotification = ''"></a>
+    <div class="content">{{$root.bannerNotification}}</div>
+  </div>   -->
+
+  <div ng-controller="AlertMessagesController">
+    <div ng-repeat="alert in alerts" ng-class="['alert', 'alert-' + alert.type, 'alert-dismissable', 'repeated-item']">
+      <button type="button" class="close" aria-hidden="true" ng-click="dismiss(alert)">&times;</button>
+      {{alert.message}}
+    </div>
+  </div>
+
+  <div class="container" ng-view=""></div>
+
+<!--   <div ng-controller="MarketingController" class="row marketing">
+    <div ng-repeat="awesomeThing in awesomeThings">
+      <h4>{{awesomeThing.title}}</h4>
+      <p>
+        {{awesomeThing.description}}
+      </p>
+    </div>
+  </div> -->
+
+<!--   <div class="footer">
+    <p>♥ from the Yeoman team</p>
+  </div> -->
+
+
+<!--   <div ng-if="showOverlay > 0">
+    <div class="overlay"></div>
+    <div class="loading"></div>
+  </div> -->
+
+    <!--[if lt IE 9]>
+    <script src="bower_components/es5-shim/es5-shim.js"></script>
+    <script src="bower_components/json3/lib/json3.min.js"></script>
+    <![endif]-->
+
+    <!-- build:js scripts/vendor.js -->
+    <!-- bower:js -->
+    <script src="bower_components/jquery/jquery.js"></script>
+    <script src="bower_components/angular/angular.js"></script>
+    <script src="bower_components/sass-bootstrap/dist/js/bootstrap.js"></script>
+    <script src="bower_components/angular-resource/angular-resource.js"></script>
+    <script src="bower_components/angular-cookies/angular-cookies.js"></script>
+    <script src="bower_components/angular-sanitize/angular-sanitize.js"></script>
+    <script src="bower_components/angular-route/angular-route.js"></script>
+    <script src="bower_components/angular-animate/angular-animate.js"></script>
+    <script src="bower_components/jquery-ui/ui/jquery-ui.js"></script>
+    <!-- endbower -->
+    <!-- endbuild -->
+
+        <!-- build:js({.tmp,app}) scripts/scripts.js -->
+        <script src="scripts/users_app.js"></script>
+        <script src="scripts/controllers/controllers.js"></script>
+        <script src="scripts/directives/directives.js"></script>
+        <script src="scripts/directives/d3_bars_directive.js"></script>
+        <script src="scripts/directives/d3_pie_directive.js"></script>
+        <script src="scripts/directives/d3_series_directive.js"></script>
+        <script src="scripts/filters/filters.js"></script>
+        <script src="scripts/services/services.js"></script>
+        <script src="scripts/services/angular-d3.js"></script>
+        <script src="scripts/bundles/messages_users_en.js"></script>
+        <!-- endbuild -->
+        <script src="//localhost:35729/livereload.js"></script>
+</body>
+</html>

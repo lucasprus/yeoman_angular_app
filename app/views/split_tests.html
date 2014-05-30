@@ -1,0 +1,26 @@
+<div class="bar graph-wrapper">
+
+  <main-menu ng-controller="MainMenuController" menu-items="menuItems"></main-menu>
+  
+  <div class="chart">
+    <d3-bars id="highchart-bar-1" data="barChartData" chart-title="{{label['aui.split_tests.chart.title']}}"></d3-bars>
+  </div>
+
+</div>
+
+<div class="wrapper space-graph">
+
+  <div striped-table on-row-clicked="updateBarChartData(index)" data="tableData" selected-index="selectedIndex" postfix="Data3"></div>
+
+</div>
+
+<div class="bar bottom">
+  <span class="plaintext right">
+  <ng-pluralize count="tableData.data.length"
+     when="label['aui.overview.list.recommendation_block']">
+  </ng-pluralize>
+ </span>
+  <div class="actions-group">
+    <a id="sf_Summary_pdf_btn" href="report" class="btn primary">{{label['aui.overview.footer.full_pdf_report']}}</a>
+  </div>
+</div>

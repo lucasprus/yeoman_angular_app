@@ -1,0 +1,9 @@
+node_modules
+dist
+.tmp
+.sass-cache
+app/bower_components
+TODO.txt
+firebug.txt
+yeoman_angular_app.sublime-project
+yeoman_angular_app.sublime-workspace

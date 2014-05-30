@@ -1,0 +1,10 @@
+  <div ng-controller="PaginationController">
+    <ul class="pagination">
+      <li ng-class="{disabled: isFirstPage}"><a ng-href="{{previousPageHref}}">&laquo;</a></li>
+      <li ng-repeat="page in pages() track by $index" ng-class="{active: $index + 1 === currentPage}"><a ng-href="#/users/list/page/{{$index + 1}}">{{$index + 1}}</a></li>
+      <li ng-class="{disabled: isLastPage()}" ng-switch on="isLastPage()">
+        <a ng-switch-when="true" ng-href="">&raquo;</a>
+        <a ng-switch-default ng-href="#/users/list/page/{{currentPage + 1}}">&raquo;</a>
+      </li>
+    </ul>
+  </div>

@@ -1,0 +1,59 @@
+<div ng-controller="UserListController">
+
+  <form>
+    View:
+    <label>
+      <input type="radio" value="default" ng-model="view" /> default
+    </label>
+    <label>
+      <input type="radio" value="detailed" ng-model="view" /> detailed
+    </label>    
+  </form>
+
+  <div ng-include="'views/templates/pagination.html'"></div>
+
+  <!-- Default list view -->
+  <div ng-if="view === 'default'" class="list-group">
+    <a ng-repeat="user in users" class="list-group-item" ng-href="#/user/{{user.username}}">{{user.username}}</a>
+  </div>
+
+  <!-- Detailed list view -->
+  <div ng-if="view === 'detailed'" class="list-group">
+    <a ng-repeat="user in users" class="list-group-item" ng-href="#/user/{{user.username}}">
+      <dl class="dl-horizontal">
+        <dt>Username</dt>
+          <dd>{{user.username}}</dd>
+        <dt>Name</dt>
+          <dd>{{user.name}}</dd>
+        <dt>Email</dt>
+          <dd>{{user.email}}</dd>
+      </dl>
+    </a>
+  </div>
+
+  <div ng-include="'views/templates/pagination.html'"></div>
+
+</div>
+
+<!-- <div ng-controller="CarouselDemoCtrl">
+  <div style="height: 305px">
+    <carousel interval="myInterval">
+      <slide ng-repeat="slide in slides" active="slide.active">
+        <img ng-src="{{slide.image}}" style="margin:auto;">
+        <div class="carousel-caption">
+          <h4>Slide {{$index}}</h4>
+          <p>{{slide.text}}</p>
+        </div>
+      </slide>
+    </carousel>
+  </div>
+  <div class="row">
+    <div class="col-md-6">
+      <a class="btn btn-info" ng-click="addSlide()">Add Slide</a>
+    </div>
+    <div class="col-md-6">
+      Interval, in milliseconds: <input type="number" class="form-control" ng-model="myInterval">
+      <br />Enter a negative number to stop the interval.
+    </div>
+  </div>
+</div> -->

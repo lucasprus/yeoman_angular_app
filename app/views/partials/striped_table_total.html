@@ -1,0 +1,35 @@
+<div class="table">
+  <div class="header">
+    <div class="columns">
+      <div class="col plaintext sortable" style="width: {{rowWidth($index)}};" ng-repeat="value in data.meta"><span>{{$root.label['aui.overview.recommendation_blocks.list.' + value]}}</span></div>
+    </div>
+  </div>
+  <div class="content">
+
+    <div class="row-wrapper" ng-repeat="section in data.data">
+
+      <div class="row" ng-class="{'highlight': $index === selectedIndex}" ng-click="updateSelectedIndex($index); onRowClicked({index: $index})">
+        <div class="col checkbox">
+          <label class="radio">
+            <input type="radio" name="stripedTableRadio{{postfix}}" value="{{$index}}" ng-model="selectedIndex">
+          </label>
+        </div>
+
+        <div class="columns">
+          <div class="col plaintext" style="width: {{rowWidth($index)}};" ng-repeat="value in section[0] track by $index"><span>{{value}}</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="inner-row">
+        <div class="row" ng-if="$parent.$index === selectedIndex" ng-repeat="rowValue in section[1]">
+          <div class="columns">
+            <div class="col plaintext" style="width: {{rowWidth($index)}};" ng-repeat="value in rowValue track by $index"><span>{{value}}</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</div>
