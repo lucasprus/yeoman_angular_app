@@ -27,20 +27,24 @@ module.exports = function (grunt) {
 
     // Watches files for changes and runs tasks based on the changed files
     watch: {
-      js: {
+      testing: {
         files: ['<%= yeoman.app %>/scripts/{,*/}*.js'],
-        tasks: ['jsbeautifier:all', 'newer:jshint:all'],
+        tasks: ['testing', 'newer:jshint:all']
+      },
+      js: {
+        files: ['<%= yeoman.app %>/scripts/{,*/}*.js', 'app.js'],
+        tasks: ['newer:jsbeautifier:all', 'newer:jshint:all'],
         options: {
           livereload: true
         }
       },
       jsTest: {
         files: ['test/spec/{,*/}*.js'],
-        tasks: ['newer:jshint:test', 'karma']
+        tasks: ['newer:jsbeautifier:test', 'newer:jshint:test', 'karma']
       },
       jsE2ETest: {
         files: ['test/e2e/{,*/}*.js'],
-        tasks: ['jsbeautifier:e2eTest']
+        tasks: ['newer:jsbeautifier:e2eTest', 'newer:jshint:e2eTest']
       },
       compass: {
         files: ['<%= yeoman.app %>/styles/{,*/}*.{scss,sass}'],
@@ -48,14 +52,14 @@ module.exports = function (grunt) {
       },
       gruntfile: {
         files: ['Gruntfile.js'],
-        tasks: ['jsbeautifier']
+        tasks: ['jsbeautifier:gruntfile', 'jshint:gruntfile']
       },
       livereload: {
         options: {
           livereload: '<%= connect.options.livereload %>'
         },
         files: [
-          '<%= yeoman.app %>/{,*/}*.html',
+          '<%= yeoman.app %>/**/*.html',
           '.tmp/styles/{,*/}*.css',
           '<%= yeoman.app %>/styles/{,*/}*.css',
           '<%= yeoman.app %>/images/{,*/}*.{png,jpg,jpeg,gif,webp,svg}'
@@ -104,7 +108,10 @@ module.exports = function (grunt) {
         reporter: require('jshint-stylish')
       },
       all: {
-        src: ['<%= yeoman.app %>/scripts/**/*.js', 'app.js', 'Gruntfile.js']
+        src: ['<%= yeoman.app %>/scripts/{,*/}*.js', 'app.js', 'Gruntfile.js']
+      },
+      gruntfile: {
+        src: ['Gruntfile.js']
       },
       test: {
         options: {
@@ -113,7 +120,8 @@ module.exports = function (grunt) {
         src: ['test/spec/{,*/}*.js']
       },
       e2eTest: {
-        src: ['test/e2e/{,*/}*.js']
+        // src: ['test/e2e/{,*/}*.js']
+        src: ['xxxxxxxxxxxx']
       }
     },
 
@@ -327,13 +335,16 @@ module.exports = function (grunt) {
 
     'jsbeautifier': {
       all: {
-        src: ['<%= yeoman.app %>/scripts/**/*.js', 'app.js', 'Gruntfile.js']
+        src: ['<%= yeoman.app %>/scripts/{,*/}*.js', 'app.js', 'Gruntfile.js']
       },
       test: {
         src: ['test/spec/{,*/}*.js']
       },
       e2eTest: {
         src: ['test/e2e/{,*/}*.js']
+      },
+      gruntfile: {
+        src: ['Gruntfile.js']
       },
       options: {
         js: {
@@ -429,4 +440,10 @@ module.exports = function (grunt) {
     'test',
     'build'
   ]);
+
+
+  grunt.registerTask('testing', function () {
+    grunt.log.warn('testing');
+  });
+
 };

@@ -39,9 +39,9 @@ angular.module("d3SeriesDirective", ["d3"])
             var y = d3.scale.linear()
               .range([innerHeight, 0]);
 
-            // var color = d3.scale.category10();
-            var color = d3.scale.ordinal()
-              .range(["#4682B4", "#1A3E71", "#3FA9F5", "#B0C4DE", "#AFEEEE", "#d0743c", "#ff8c00"]);
+            var color = d3.scale.category10();
+            /*var color = d3.scale.ordinal()
+              .range(["#4682B4", "#1A3E71", "#3FA9F5", "#B0C4DE", "#AFEEEE", "#d0743c", "#ff8c00"]);*/
             // var color = d3.scale.ordinal().range(["#98abc5", "#d0743c", "#ff8c00", "#8a89a6", "#7b6888", "#6b486b", "#a05d56"]);
 
             var xAxis = d3.svg.axis()
@@ -184,7 +184,7 @@ angular.module("d3SeriesDirective", ["d3"])
                 .attr("cy", function (d) {
                   return y(d.value);
                 })
-                .style("fill", function (d) {
+                .style("fill", function () {
                   return color(d3.select(this.parentNode)
                     .datum()
                     .name);
@@ -195,7 +195,7 @@ angular.module("d3SeriesDirective", ["d3"])
                 .attr("d", function (d) {
                   return area(d.values);
                 })
-                .style("fill", function (d) {
+                .style("fill", function () {
                   return color(d3.select(this.parentNode)
                     .datum()
                     .name);
@@ -203,6 +203,7 @@ angular.module("d3SeriesDirective", ["d3"])
 
               var focus = chart.append("g")
                 .attr("class", "focus")
+                .style("fill", "yellow")
                 .style("display", "none");
 
               focus.append("circle")
@@ -259,17 +260,17 @@ angular.module("d3SeriesDirective", ["d3"])
                 } catch (error) {}
 
                 focus.attr("transform", "translate(" + x(d.date) + "," + y(value) + ")");
-                tooltip.html('<span class="chart-tooltip-date">' + $filter('date')(d.date) + "</span>" + "<br />" + '<span class="chart-tooltip-label">' + scope.$root.label['aui.chart.' + closestName] + ": </span>" + '<span class="chart-tooltip-value">' + $filter('number')(value) + "</span>");
+                tooltip.html('<span class="chart-tooltip-date">' + $filter('date')(d.date) + "</span>" + "<br />" + '<span class="chart-tooltip-label">' + closestName + ": </span>" + '<span class="chart-tooltip-value">' + $filter('number')(value) + "</span>");
 
                 tooltip.style("left", (x(d.date) + padding.left + 20) + "px")
                   .style("top", (y(value) + padding.top - 30) + "px");
               }
 
-              focus.on("mouseover", function (d) {
+              focus.on("mouseover", function () {
                 tooltip
                   .style("display", null);
               })
-                .on("mouseout", function (d) {
+                .on("mouseout", function () {
                   tooltip.style("display", "none");
                 });
 
@@ -305,8 +306,7 @@ angular.module("d3SeriesDirective", ["d3"])
                   legendEntry.select("rect")
                     .style("fill", "#fff");
 
-                  if (angular.element(this)
-                    .hasClass("active")) {
+                  if (this.getAttribute("class") && this.getAttribute("class").indexOf("active") > -1) {
                     d3.select(this)
                       .classed("active", false);
                   } else {
@@ -342,7 +342,7 @@ angular.module("d3SeriesDirective", ["d3"])
                 .attr("dy", ".35em")
                 .style("text-anchor", "end")
                 .text(function (d) {
-                  return scope.$root.label['aui.chart.' + d];
+                  return d;
                 });
 
               chart.append("text")

@@ -28,17 +28,15 @@ angular.module('d3PieDirective', ['d3'])
 
             $log.log('Called d3Pie link function');
 
-            var dataKey = scope.key;
-            var dataValue = scope.value;
-
-            var d3Element = d3.select(element[0]);
-
-            var padding = {
-              top: parseInt(scope.paddingTop, 10) || 50,
-              bottom: parseInt(scope.paddingBottom, 10) || 50,
-              left: parseInt(scope.paddingLeft, 10) || 50,
-              right: parseInt(scope.paddingRight, 10) || 50
-            },
+            var dataKey = scope.key,
+              dataValue = scope.value,
+              d3Element = d3.select(element[0]),
+              padding = {
+                top: parseInt(scope.paddingTop, 10) || 50,
+                bottom: parseInt(scope.paddingBottom, 10) || 50,
+                left: parseInt(scope.paddingLeft, 10) || 50,
+                right: parseInt(scope.paddingRight, 10) || 50
+              },
               width = parseInt(scope.width, 10) || parseInt(d3Element.style('width'), 10) || 800,
               height = parseInt(scope.height, 10) || parseInt(d3Element.style('height'), 10) || 400,
               innerWidth = width - padding.left - padding.right,
@@ -57,9 +55,9 @@ angular.module('d3PieDirective', ['d3'])
 
             var maxSlices = parseInt(scope.maxSlices, 10) || 7;
 
-            // var color = d3.scale.category10();
-            var color = d3.scale.ordinal()
-              .range(['#4682B4', '#AFDDEE', '#1A3E71', '#3FA9F5', '#B0C4DE', '#8388B2', '#5884B2', '#8388B2']);
+            var color = d3.scale.category10();
+            /*var color = d3.scale.ordinal()
+              .range(['#4682B4', '#AFDDEE', '#1A3E71', '#3FA9F5', '#B0C4DE', '#8388B2', '#5884B2', '#8388B2']);*/
             // var color = d3.scale.ordinal().range(['#98abc5', '#d0743c', '#ff8c00', '#8a89a6', '#7b6888', '#6b486b', '#a05d56']);
 
             var svg = d3Element.append('svg')
@@ -118,18 +116,18 @@ angular.module('d3PieDirective', ['d3'])
                 return;
               }
 
-              var data = angular.copy(data);
+              var dataCopy = angular.copy(data);
 
               var chart = svg
                 .append('g')
                 .attr('transform', 'translate(' + (padding.left + radius) + ',' + (padding.top + radius) + ')');
 
               var total = 0;
-              data.forEach(function (d) {
+              dataCopy.forEach(function (d) {
                 total += d[dataValue];
               });
 
-              data.sort(function (a, b) {
+              /*dataCopy.sort(function (a, b) {
                 if (a[dataValue] > b[dataValue]) {
                   return -1;
                 }
@@ -139,10 +137,10 @@ angular.module('d3PieDirective', ['d3'])
                 }
 
                 return 0;
-              });
+              });*/
 
-              if (maxSlices < data.length) {
-                var others = data.splice(maxSlices - 1, data.length - maxSlices + 1);
+              if (maxSlices < dataCopy.length) {
+                var others = dataCopy.splice(maxSlices - 1, dataCopy.length - maxSlices + 1);
 
                 var othersTotal = 0;
                 others.forEach(function (d) {
@@ -153,15 +151,15 @@ angular.module('d3PieDirective', ['d3'])
                 othersObj[dataKey] = 'others';
                 othersObj[dataValue] = othersTotal;
 
-                data.push(othersObj);
+                dataCopy.push(othersObj);
               }
 
-              data.forEach(function (d) {
+              dataCopy.forEach(function (d) {
                 d.percentage = d3.format('%')(d[dataValue] / total);
               });
 
               var g = chart.selectAll('.arc')
-                .data(pie(data))
+                .data(pie(dataCopy))
                 .enter()
                 .append('g')
                 .attr('class', 'arc');
@@ -186,7 +184,7 @@ angular.module('d3PieDirective', ['d3'])
                 });
 
               g
-                .on('mouseenter', function (d, i) {
+                .on('mouseenter', function (d) {
 
                   var centroid = arc.centroid(d);
 
@@ -194,23 +192,23 @@ angular.module('d3PieDirective', ['d3'])
                     .style('display', null)
                     .html('<span class=\"chart-tooltip-label\">' + d.data[dataKey] + ': </span>' + '<span class=\"chart-tooltip-value\">' + $filter('number')(d.data[dataValue]) + '</span>');
 
-                  var tooltipWidth = parseInt(tooltip.style('width'), 10) || 0;
-                  var tooltipPaddingLeft = parseInt(tooltip.style('padding-left'), 10) || 0;
-                  var tooltipBorderLeft = parseInt(tooltip.style('border-left'), 10) || 0;
-                  var tooltipPaddingRight = parseInt(tooltip.style('padding-right'), 10) || 0;
-                  var tooltipBorderRight = parseInt(tooltip.style('border-right'), 10) || 0;
+                  var tooltipWidth = parseInt(tooltip.style('width'), 10) || 0,
+                    tooltipPaddingLeft = parseInt(tooltip.style('padding-left'), 10) || 0,
+                    tooltipBorderLeft = parseInt(tooltip.style('border-left'), 10) || 0,
+                    tooltipPaddingRight = parseInt(tooltip.style('padding-right'), 10) || 0,
+                    tooltipBorderRight = parseInt(tooltip.style('border-right'), 10) || 0;
 
-                  var tooltipHeight = parseInt(tooltip.style('height'), 10) || 0;
-                  var tooltipPaddingTop = parseInt(tooltip.style('padding-top'), 10) || 0;
-                  var tooltipBorderTop = parseInt(tooltip.style('border-top'), 10) || 0;
-                  var tooltipPaddingBottom = parseInt(tooltip.style('padding-bottom'), 10) || 0;
-                  var tooltipBorderBottom = parseInt(tooltip.style('border-bottom'), 10) || 0;
+                  var tooltipHeight = parseInt(tooltip.style('height'), 10) || 0,
+                    tooltipPaddingTop = parseInt(tooltip.style('padding-top'), 10) || 0,
+                    tooltipBorderTop = parseInt(tooltip.style('border-top'), 10) || 0,
+                    tooltipPaddingBottom = parseInt(tooltip.style('padding-bottom'), 10) || 0,
+                    tooltipBorderBottom = parseInt(tooltip.style('border-bottom'), 10) || 0;
 
-                  var totalTooltipWidth = tooltipWidth + tooltipPaddingLeft + tooltipBorderLeft + tooltipPaddingRight + tooltipBorderRight;
-                  var totalTooltipHeight = tooltipHeight + tooltipPaddingTop + tooltipBorderTop + tooltipPaddingBottom + tooltipBorderBottom;
+                  var totalTooltipWidth = tooltipWidth + tooltipPaddingLeft + tooltipBorderLeft + tooltipPaddingRight + tooltipBorderRight,
+                    totalTooltipHeight = tooltipHeight + tooltipPaddingTop + tooltipBorderTop + tooltipPaddingBottom + tooltipBorderBottom;
 
-                  var cosine = centroid[0] / (radius / 2);
-                  var sine = centroid[1] / (radius / 2);
+                  var cosine = centroid[0] / (radius / 2),
+                    sine = centroid[1] / (radius / 2);
 
                   this.setAttribute('transform', 'translate(' + 3 * cosine + ',' + 3 * sine + ')');
 
@@ -222,7 +220,7 @@ angular.module('d3PieDirective', ['d3'])
                 .on('mouseleave', function () {
                   tooltip.style('display', 'none');
 
-                  var arcStyle = this.getElementsByTagName('path')[0].style;
+                  // var arcStyle = this.getElementsByTagName('path')[0].style;
                   // arcStyle.stroke = null;
                   // arcStyle.strokeWidth = null;
 
@@ -231,12 +229,12 @@ angular.module('d3PieDirective', ['d3'])
                 });
 
               var legendEntry = legend.selectAll('.legend')
-                .data(data)
+                .data(dataCopy)
                 .enter()
                 .append('g')
                 .attr('class', 'legend')
                 .attr('transform', function (d, i) {
-                  return 'translate(0,' + i * 19 + ')';
+                  return 'translate(0,' + i * 20 + ')';
                 });
 
               legendEntry.append('rect')

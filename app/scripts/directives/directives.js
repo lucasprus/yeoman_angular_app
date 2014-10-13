@@ -1,5 +1,5 @@
 'use strict';
-angular.module('usersApp.directives', [])
+angular.module('usersApp.directives', ['usersApp.services'])
   .directive('dialog', function () {
     return {
       transclude: true,
@@ -105,7 +105,7 @@ angular.module('usersApp.directives', [])
   .directive('myCustomer', function () {
     return {
       templateUrl: 'views/partials/my-customer.html',
-      compile: function (tElement, tAttrs, transclude) {
+      compile: function (tElement) {
         console.log('compile');
         console.log('tElement: ', tElement);
 
@@ -117,12 +117,12 @@ angular.module('usersApp.directives', [])
         // angular.element(tElement.get(0).parentNode).append(clonedNode);
 
         return {
-          pre: function preLink(scope, iElement, iAttrs, controller) {
+          pre: function preLink(scope, iElement) {
             console.log('preLink');
             console.log('scope: ', scope);
             console.log('iElement: ', iElement);
           },
-          post: function postLink(scope, iElement, iAttrs, controller) {
+          post: function postLink(scope, iElement) {
             console.log('postLink');
             console.log('scope: ', scope);
             console.log('iElement: ', iElement);
@@ -133,11 +133,18 @@ angular.module('usersApp.directives', [])
   })
   .directive('datepicker', function () {
     return function (scope, element) {
-      $(element).datepicker({
+      jQuery(element).datepicker({
         changeMonth: true,
         changeYear: true,
         yearRange: '-100:c',
         dateFormat: 'yy-mm-dd'
       });
     };
-  });
+  })
+  .directive('appVersion', ['version',
+    function (version) {
+      return function (scope, elm) {
+        elm.text(version);
+      };
+    }
+  ]);

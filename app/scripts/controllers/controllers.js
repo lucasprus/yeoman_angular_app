@@ -1,6 +1,6 @@
 'use strict';
-angular.module('usersApp.controllers', ['usersApp.services'])
-  .controller('SelectedDateRangeController', ['$scope', 'DateRangeService', '$log',
+angular.module('usersApp.controllers', ['usersApp.services', 'ngRoute', 'ngCookies'])
+/*  .controller('SelectedDateRangeController', ['$scope', 'DateRangeService', '$log',
     function ($scope, DateRangeService, $log) {
       $log.log('Called SelectedDateRangeController');
       $scope.DateRangeService = DateRangeService;
@@ -51,7 +51,7 @@ angular.module('usersApp.controllers', ['usersApp.services'])
         $scope.dialogDate.period = DateRangeService.period;
       };
     }
-  ])
+  ])*/
 /*  .controller('SomeController', ['$scope', '$log', '$window', '$rootScope',
     function ($scope, $log, $window, $rootScope) {
       $log.log('Called SomeController');
@@ -82,17 +82,17 @@ angular.module('usersApp.controllers', ['usersApp.services'])
       $cookieStore.put('view', newValue);
     });
 
-    UsersDataService.readList($scope.currentPage, function (data) {
+    UsersDataService.readList($scope.currentPage).then(function (data) {
         message = 'Successfully fetched users';
         $log.log(message);
-        $scope.data = data;
-        $scope.users = data.users;
+        $scope.data = data.data;
+        $scope.users = data.data.users;
         AlertMessagesService.push({
           type: 'success',
           message: message
         }, {
           type: 'info',
-          message: "Total: " + data.count + " users"
+          message: "Total: " + $scope.data.count + " users"
         });
       },
       function () {
@@ -124,7 +124,7 @@ angular.module('usersApp.controllers', ['usersApp.services'])
         return pagesTotal() === $scope.currentPage;
       };
 
-      $scope.isFirstPage = !($scope.currentPage - 1);
+      $scope.isFirstPage = $scope.currentPage - 1 === 0;
 
       $scope.previousPageHref = !$scope.isFirstPage && ('#/users/list/page/' + ($scope.currentPage - 1)) || '';
 
@@ -151,13 +151,13 @@ angular.module('usersApp.controllers', ['usersApp.services'])
       $scope.data = {};
       // $scope.data.template = $scope.templates['user'];
 
-      function fetch() {
+      $scope.fetch = function () {
         UsersDataService.read($routeParams.userName, function (user) {
             message = 'Successfully fetched user';
             $log.log(message);
             $scope.user = user;
             $scope.user.birthday = $filter('date')(user.birthday, 'yyyy-MM-dd');
-            $scope.data.template = $scope.templates['user'];
+            $scope.data.template = $scope.templates.user;
             AlertMessagesService.push({
               type: 'success',
               message: message
@@ -171,10 +171,8 @@ angular.module('usersApp.controllers', ['usersApp.services'])
               message: message
             });
           });
-      }
-      fetch();
-
-
+      };
+      $scope.fetch();
 
       $scope.save = function () {
         UsersDataService.update($routeParams.userName, $scope.user, function (user) {
@@ -182,7 +180,7 @@ angular.module('usersApp.controllers', ['usersApp.services'])
             $log.log(message);
             $scope.user = user;
             $scope.user.birthday = $filter('date')(user.birthday, 'yyyy-MM-dd');
-            $scope.data.template = $scope.templates['user'];
+            $scope.data.template = $scope.templates.user;
             AlertMessagesService.push({
               type: 'success',
               message: message
@@ -207,10 +205,6 @@ angular.module('usersApp.controllers', ['usersApp.services'])
           });
       };
 
-      $scope.cancel = function () {
-        fetch();
-      };
-
       $scope.delete = function () {
         UsersDataService.delete($routeParams.userName, function () {
             message = 'Successfully deleted user';
@@ -233,8 +227,8 @@ angular.module('usersApp.controllers', ['usersApp.services'])
 
     }
   ])
-  .controller('UsersMenuController', ['$scope', '$log', '$window', '$rootScope', '$location',
-    function ($scope, $log, $window, $rootScope, $location) {
+  .controller('UsersMenuController', ['$scope', '$log', '$window', '$location',
+    function ($scope, $log, $window, $location) {
       $log.log('Called UsersMenuController');
       $window.usersMenuControllerScope = $scope;
 
@@ -304,7 +298,7 @@ angular.module('usersApp.controllers', ['usersApp.services'])
           });
       };
 
-      $scope.cancel = function () {
+      $scope.fetch = function () {
         $location.path('/users/list');
       };
 
@@ -337,7 +331,7 @@ angular.module('usersApp.controllers', ['usersApp.services'])
             message: message
           });
         },
-        function (data, status) {
+        function () {
           message = 'Error fetching age groups stats';
           $log.log(message);
           AlertMessagesService.push({
@@ -346,17 +340,17 @@ angular.module('usersApp.controllers', ['usersApp.services'])
           });
         });
 
-      UsersStatsService.seriesChartData(function (data) {
-          message = 'Successfully fetched seriesChartData';
+      UsersStatsService.activity(function (data) {
+          message = 'Successfully fetched activity stats';
           $log.log(message);
-          $scope.seriesChartData = data;
+          $scope.activityData = data;
           AlertMessagesService.push({
             type: 'success',
             message: message
           });
         },
-        function (data, status) {
-          message = 'Error fetching seriesChartData';
+        function () {
+          message = 'Error fetching activity stats';
           $log.log(message);
           AlertMessagesService.push({
             type: 'danger',
@@ -365,17 +359,17 @@ angular.module('usersApp.controllers', ['usersApp.services'])
         });
 
 
-      UsersStatsService.barChartData(function (data) {
-          message = 'Successfully fetched barChartData';
+      UsersStatsService.genderByAgeGroups(function (data) {
+          message = 'Successfully fetched gender by age groups stats';
           $log.log(message);
-          $scope.barChartData = data;
+          $scope.genderByAgeGroupsData = data;
           AlertMessagesService.push({
             type: 'success',
             message: message
           });
         },
-        function (data, status) {
-          message = 'Error fetching barChartData';
+        function () {
+          message = 'Error fetching gender by age groups stats';
           $log.log(message);
           AlertMessagesService.push({
             type: 'danger',
@@ -411,6 +405,24 @@ angular.module('usersApp.controllers', ['usersApp.services'])
           $scope.data = data;
         }, ErrorHandlerService.onError);
       });*/
+
+    }
+  ])
+  .controller('PhoneListCtrl', ['$scope', '$http',
+    function ($scope, $http) {
+      $http.get('http://localhost:5000/api/users/').success(function (data) {
+        $scope.phones = data;
+        $scope.orderProp = 'name';
+      });
+
+      $scope.orderProp = 'age';
+      $scope.changed = false;
+
+      $scope.orderPropChangeHandler = function () {
+        // console.log(newValue);
+        $scope.changed = true;
+        // $cookieStore.put('view', newValue);
+      };
 
     }
   ]);

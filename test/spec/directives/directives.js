@@ -1,20 +1,21 @@
 'use strict';
 
-describe('Directive: directives', function () {
+describe('directives', function () {
+  beforeEach(module('usersApp.directives'));
 
-  // load the directive's module
-  beforeEach(module('yeomanUsersApiAndAngularAppApp'));
+  describe('app-version', function () {
+    var element,
+      scope;
 
-  var element,
-    scope;
+    beforeEach(inject(function ($rootScope) {
+      scope = $rootScope.$new();
+    }));
 
-  beforeEach(inject(function ($rootScope) {
-    scope = $rootScope.$new();
-  }));
-
-  it('should make hidden element visible', inject(function ($compile) {
-    element = angular.element('<directives></directives>');
-    element = $compile(element)(scope);
-    expect(element.text()).toBe('this is the directives directive');
-  }));
+    it('should print current version', function () {
+      inject(function ($compile) {
+        element = $compile('<span app-version></span>')(scope);
+        expect(element.text()).toEqual('0.1');
+      });
+    });
+  });
 });

@@ -18,8 +18,10 @@
   "strict": true,
   "trailing": true,
   "smarttabs": true,
+  "validthis": true,
   "globals": {
     "angular": false,
+    "jQuery": false,
     /* Jasmine */
     "describe": false,
     "it": false,

@@ -7,10 +7,8 @@ angular.module("usersApp.services", [])
     $log.log("Called UsersDataService");
 
     return {
-      readList: function (page, onSuccess, onError) {
-        $http.get(API_ENDPOINT + '?page=' + page)
-          .success(onSuccess)
-          .error(onError);
+      readList: function (page) {
+        return $http.get(API_ENDPOINT + '?page=' + page);
       },
       create: function (user, onSuccess, onError) {
         $http.post(API_ENDPOINT, user)
@@ -46,32 +44,39 @@ angular.module("usersApp.services", [])
             .success(onSuccess)
             .error(onError);
         },
-        seriesChartData: function (onSuccess, onError) {
-          $http.get(API_ENDPOINT + 'stats/series-chart-data')
+        activity: function (onSuccess, onError) {
+          $http.get(API_ENDPOINT + 'stats/activity')
             .success(function (data, status) {
 
               var transform = function (json) {
-                var data = json.line,
+                var data = json.data,
+                  startDate = parseInt(json.meta.startDate, 10),
                   key, millisecondsPerDay = 864e5,
-                  summaryData = [],
+                  activityData = [],
                   l;
 
-                for (key in data) {
-                  l = data[key].length;
-                  summaryData.push({
-                    name: key,
-                    values: data[key].map(function (value, index) {
-                      return {
-                        date: new Date((new Date()).valueOf() - (l - index - 1) * millisecondsPerDay),
-                        value: value
-                      };
-                    })
-                  });
+                function mappingFunction(value, index) {
+                  return {
+                    date: new Date(startDate + index * millisecondsPerDay),
+                    value: value
+                  };
                 }
+
+                for (key in data) {
+                  if (data.hasOwnProperty(key)) {
+                    l = data[key].length;
+                    activityData.push({
+                      name: key,
+                      values: data[key].map(mappingFunction)
+                    });
+                  }
+                }
+
                 return {
                   meta: Object.keys(data),
-                  data: summaryData
+                  data: activityData
                 };
+
               };
 
               onSuccess(transform(data), status);
@@ -79,8 +84,8 @@ angular.module("usersApp.services", [])
             })
             .error(onError);
         },
-        barChartData: function (onSuccess, onError) {
-          $http.get(API_ENDPOINT + 'stats/bar-chart-data')
+        genderByAgeGroups: function (onSuccess, onError) {
+          $http.get(API_ENDPOINT + 'stats/gender-by-age-groups')
             .success(onSuccess)
             .error(onError);
         }
@@ -116,12 +121,21 @@ angular.module("usersApp.services", [])
       $log.log("Called AlertMessagesService");
       return {
         alerts: [],
-        push: function (alert) {
-          this.alerts.push(alert);
-          var that = this;
-          $timeout(function () {
-            that.delete(alert);
-          }, 3000);
+        push: function () {
+          var alert, i = 0,
+            l = arguments.length;
+
+          function timeoutFunction(that, alert) {
+            return function () {
+              that.delete(alert);
+            };
+          }
+          for (; i < l; i += 1) {
+            alert = arguments[i];
+            this.alerts.push(alert);
+            var that = this;
+            $timeout(timeoutFunction(that, alert), 3000);
+          }
         },
         delete: function (alert) {
           var alerts = this.alerts;
@@ -129,4 +143,36 @@ angular.module("usersApp.services", [])
         }
       };
     }
-  ]);
+  ])
+  .value('version', '0.1')
+  .factory('SampleGenerator', function () {
+    return {
+      exponential: function (mean, size) {
+        var i = 0,
+          sample = [];
+        for (; i < size; i = i + 1) {
+          sample.push(-1 / (1 / mean) * Math.log(Math.random()));
+        }
+        return sample;
+      },
+      uniform: function (lower, upper, size) {
+        var i = 0,
+          sample = [];
+        for (; i < size; i = i + 1) {
+          sample.push(lower + Math.random() * (upper - lower));
+        }
+        return sample;
+      },
+      normal: function (size) {
+        var i = 0,
+          sample = [],
+          theta, radius;
+        for (; i < size; i = i + 1) {
+          theta = 2 * Math.PI * Math.random();
+          radius = Math.sqrt(-2 * Math.log(Math.random()));
+          sample.push(radius * Math.cos(theta));
+        }
+        return sample;
+      }
+    };
+  });

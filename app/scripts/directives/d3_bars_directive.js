@@ -39,9 +39,9 @@ angular.module('d3BarsDirective', ['d3'])
             var y = d3.scale.linear()
               .range([innerHeight, 0]);
 
-            // var color = d3.scale.category10();
-            var color = d3.scale.ordinal()
-              .range(['#4682B4', '#1A3E71', '#3FA9F5', '#B0C4DE', '#AFEEEE', '#d0743c', '#ff8c00']);
+            var color = d3.scale.category10();
+            /*var color = d3.scale.ordinal()
+              .range(['#4682B4', '#1A3E71', '#3FA9F5', '#B0C4DE', '#AFEEEE', '#d0743c', '#ff8c00']);*/
             // var color = d3.scale.ordinal().range(['#98abc5', '#d0743c', '#ff8c00', '#8a89a6', '#7b6888', '#6b486b', '#a05d56']);
 
             var xAxis = d3.svg.axis()
@@ -156,10 +156,10 @@ angular.module('d3BarsDirective', ['d3'])
                   return color(d.key);
                 });
 
-              bar.on('mouseenter', function (d, dd, ddd, dddd) {
+              bar.on('mouseenter', function (d) {
                 tooltip
                   .style('display', null)
-                  .html('<span class=\"chart-tooltip-label\">' + scope.$root.label['aui.chart.' + d.key] + ': </span>' + '<span class=\"chart-tooltip-value\">' + $filter('number')(d.value) + '</span>');
+                  .html('<span class=\"chart-tooltip-label\">' + d.key + ': </span>' + '<span class=\"chart-tooltip-value\">' + $filter('number')(d.value) + '</span>');
 
                 var tooltipWidth = parseInt(tooltip.style('width'), 10) || 0;
                 var tooltipPaddingLeft = parseInt(tooltip.style('padding-left'), 10) || 0;
@@ -197,7 +197,7 @@ angular.module('d3BarsDirective', ['d3'])
                 .attr('dy', '.35em')
                 .style('text-anchor', 'end')
                 .text(function (d) {
-                  return scope.$root.label['aui.chart.' + d];
+                  return d;
                 });
 
               chart.append('text')

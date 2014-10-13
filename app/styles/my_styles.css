@@ -53,7 +53,9 @@
 
 .chart-tooltip {
   position: absolute;
+  padding: 3px;
   border: 1px solid blue;
+  background-color: #FFFFFF;
 }
 
 path.line, rect.overlay {
@@ -66,6 +68,14 @@ pointer-events: all;
 
 path.area {
   opacity: 0.5;
+}
+
+path.area.active {
+  opacity: 0.8;
+}
+
+path.line.active {
+  stroke-width: 5px;
 }
 
 
